@@ -1,0 +1,51 @@
+<apex:page controller="InvoiceAdministrationController" sidebar="false" >
+	<head>
+        <style>
+            .jobStatus-msg {
+            	font-size: 1.12em;
+                margin-left: 10px;
+            }
+        </style>        
+    </head>	
+    <apex:form >
+        <apex:variable var="instanceURL" value="{!LEFT($CurrentPage.URL,FIND('/',$CurrentPage.URL,9))}"/>
+        
+        <apex:pageBlock id="page-block" title="Invoice Job Administration">
+            <apex:pageMessages ></apex:pageMessages>
+            <div style="min-height: 200px;">
+                <table width="60%" id="admin-table">
+                    <tr>
+                        <td><b>STEP 1</b></td>
+                        <td>
+                            <span>
+                                Generate Invoices for False Alarms
+                            </span>
+                        </td>
+                        <td>
+                            <span>                
+                                <apex:commandButton action="{!executeBatchFalseAlarmInvoice}" 
+                                	value="Generate False Alarm Invoices" reRender="page-block" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2">
+                            <apex:variable var="faiBatchCompleteStatus" value="{!falseAlarmBatchCompleteStatus}"/>
+                            <apex:outputPanel id="faiStatus-panel" >
+                                <apex:image url="{!instanceURL}/img/apex/processing.gif" rendered="{!hasFAInvoiceBatchInProgress}"/>
+                                
+                                <apex:outputLabel value="{!faiJobStatus}" 
+                                    style="color: {!IF(faiJobStatus == faiBatchCompleteStatus, 'green','orange')};" 
+                                    rendered="{!NOT(ISNULL(faiJobStatus))}" styleClass="jobStatus-msg"/>
+                        	</apex:outputPanel>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <apex:actionPoller id="faiBatch-check-poller" action="{!checkFalseAlarmInvoiceBatchStatus}" 
+            	reRender="faiStatus-panel" interval="15" enabled="{!hasFAInvoiceBatchInProgress}"/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

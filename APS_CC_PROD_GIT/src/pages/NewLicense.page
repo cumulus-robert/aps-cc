@@ -1,0 +1,72 @@
+<!--
+ RequestId    ModifiedDate    Description
+  APS-367        2016-09-07     Pre-populate fields of Licesnse if "faId" parameter
+                                is present in URL
+-->
+<apex:page standardController="License__c" extensions="NewLicenseController">
+
+<apex:sectionHeader title="Submit New License Request" subtitle="Enter New License Details Below"/>
+
+    <apex:form >
+        <apex:pageBlock title="New License Details" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!submit}" value="Submit"/>
+            </apex:pageBlockButtons>
+
+            <!--  Variable to identify False_Alarm Id is present in URL and has value or not -->
+            <apex:variable var="isFAIdPresent" value="{!AND(NOT(ISNULL($CurrentPage.Parameters.faId)), ($CurrentPage.Parameters.faId != ''))}" />
+            
+            <apex:PageBlockSection title="Location Details" columns="2">
+                <apex:PageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.License__c.Fields.Police_Department__c.label}"/>
+                    <apex:selectList value="{!thePD}" multiselect="false" Required="false" size="1"> 
+                        <apex:selectOptions value="{!PoliceDepartments}"/> 
+                    </apex:selectList>
+                </apex:PageBlockSectionItem>
+                <apex:outputField value="{!License__c.New_Location_Address__c}" rendered="{!isFAIdPresent}"  />
+                <apex:outputText value=" " rendered="{!NOT(isFAIdPresent)}"  />
+                
+                <apex:inputField value="{!License__c.Location_Street_Number__c}" />             
+                <apex:outputField value="{!License__c.Location_Business_Name__c}" rendered="{!isFAIdPresent}" />                    
+                <apex:outputText value=" " rendered="{!NOT(isFAIdPresent)}"  />
+                
+                
+                <apex:inputField value="{!License__c.Location_Street_Direction_Prefix__c}" />
+                <br/>
+                
+                <apex:inputField value="{!License__c.Location_Street_Name__c}" />
+                <br/>
+                
+                <apex:inputField value="{!License__c.Location_Street_Direction_Suffix__c}" />
+                <br/>
+                
+                <apex:inputField value="{!License__c.Location_Street_Type__c}" />
+                <br/>
+                
+                <apex:inputField value="{!License__c.Location_City__c}" />
+                <br/>
+                
+                <apex:inputField value="{!License__c.Location_State__c}" />
+                <br/>
+                
+                <apex:inputField value="{!License__c.Location_Zip__c}" />
+                <br/>
+                
+                <apex:inputField value="{!License__c.Location_Phone__c}" />
+                <br/>                
+            </apex:PageBlockSection>
+
+            <apex:PageBlockSection title="Additional Details" columns="2">
+                <apex:PageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.License__c.Fields.Alarm_Company__c.label}"/>
+                    <apex:selectList value="{!theAlarmCompany}" multiselect="false" Required="false" size="1"> 
+                        <apex:selectOptions value="{!AlarmCompanies}"/> 
+                    </apex:selectList>
+                </apex:PageBlockSectionItem>
+                <apex:inputField value="{!License__c.License_Type__c}" />               
+            </apex:PageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+
+</apex:page>
