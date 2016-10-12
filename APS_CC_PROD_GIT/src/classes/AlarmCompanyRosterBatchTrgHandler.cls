@@ -3,7 +3,7 @@
  * @Date: 2016-08-26
  * @Author: Cumulus Vision
  * Modified  ModifiedDate   Description
- * APS-363   2016-09-07     Initial Phase 
+ * APS-363   2016-09-07     Initial Phase
 */
 public class AlarmCompanyRosterBatchTrgHandler {
 	public Boolean isBefore;
